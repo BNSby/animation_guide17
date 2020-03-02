@@ -1,3 +1,4 @@
+import 'package:animation_guide17/src/widgets/cat.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -5,18 +6,52 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with TickerProviderStateMixin {
+  Animation<double> catAnimation;
+  AnimationController catController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    catController = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
+
+    catAnimation = Tween(begin: 0.0, end: 100.0).animate(
+      CurvedAnimation(
+        parent: catController,
+        curve: Curves.easeIn,
+      ),
+    );
+
+//    catController.forward();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Animation !'),
       ),
-      body: buildAnimation(),
+      body: GestureDetector(
+        onTap: () => catController.forward(),
+        child: buildAnimation(),
+      ),
     );
   }
 
   Widget buildAnimation() {
-    return;
+    return AnimatedBuilder(
+      animation: catAnimation,
+      child: Cat(),
+      builder: (context, child) {
+        return Container(
+          child: child,
+          margin: EdgeInsets.only(top: catAnimation.value),
+        );
+      },
+    );
   }
 }
