@@ -36,10 +36,18 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         title: Text('Animation !'),
       ),
       body: GestureDetector(
-        onTap: () => catController.forward(),
+        onTap: () => onTap(),
         child: buildAnimation(),
       ),
     );
+  }
+
+  void onTap() {
+    if (catController.status == AnimationStatus.completed) {
+      catController.reverse();
+    } else if (catController.status == AnimationStatus.dismissed) {
+      catController.forward();
+    }
   }
 
   Widget buildAnimation() {
@@ -52,6 +60,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           margin: EdgeInsets.only(top: catAnimation.value),
         );
       },
+    );
+  }
+
+  Widget buildBox() {
+    return Container(
+      width: 200.0,
+      height: 200.0,
+      color: Colors.brown,
     );
   }
 }
